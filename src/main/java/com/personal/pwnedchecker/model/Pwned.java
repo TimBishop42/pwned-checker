@@ -23,6 +23,9 @@ public class Pwned {
     private Date breachDate;
     private String description;
     private Long pwnCount;
+    private String domain;
+    private Date addedDate;
+
 
 
 }
