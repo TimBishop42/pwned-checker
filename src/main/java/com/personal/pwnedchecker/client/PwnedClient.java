@@ -11,7 +11,7 @@ import reactor.core.publisher.Mono;
 public class PwnedClient {
     private WebClient client = WebClient.create("http://localhost:8080");
 
-    private Mono<ClientResponse> result = client.get()
+    private Mono<String> result = client.get()
             .uri("/hello")
             .accept(MediaType.TEXT_PLAIN)
             .header("Add my API key here")
