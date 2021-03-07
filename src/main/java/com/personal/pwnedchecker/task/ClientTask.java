@@ -1,5 +1,6 @@
 package com.personal.pwnedchecker.task;
 
+import com.personal.pwnedchecker.model.Pwned;
 import com.personal.pwnedchecker.service.PwnedUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -10,13 +11,14 @@ public class ClientTask implements Runnable{
     @Autowired
     private PwnedUserService pwnedUserService;
 
-    @Autowired
-    private HaveIBeenPwnedService haveIBeenPwnedService;
-
     @Override
     public void run() {
 
         List<String> userEmails = pwnedUserService.fetchAllUsers();
+
+        List<Pwned> pwneByUserEmail = pwnedUserService.retrievePwnedListForUser("Test");
+
+        System.out.println("Pwned!: "+ pwneByUserEmail.get(1));
 
         //Do the DB check for users, query API
             //DB check needs to cache list of users to minimize DB calls
