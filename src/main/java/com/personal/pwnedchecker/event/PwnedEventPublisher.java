@@ -13,8 +13,8 @@ public class PwnedEventPublisher {
     @Autowired
     private ApplicationEventPublisher applicationEventPublisher;
 
-    public void publishPwnedEvent(final List<Pwned> pwnedList) {
-        PwnedEvent pwnedEvent = new PwnedEvent(this, pwnedList);
+    public void publishPwnedEvent(final List<Pwned> pwnedList, String userEmail) {
+        PwnedEvent pwnedEvent = new PwnedEvent(this, pwnedList, userEmail);
         applicationEventPublisher.publishEvent(pwnedEvent);
 
     }

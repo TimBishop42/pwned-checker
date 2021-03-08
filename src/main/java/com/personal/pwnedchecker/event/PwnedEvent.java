@@ -7,12 +7,16 @@ import java.util.List;
 
 public class PwnedEvent extends ApplicationEvent {
     private List<Pwned> pwnedList;
-    public PwnedEvent(Object source, List<Pwned> pwnedList) {
+    private String userEmail;
+    public PwnedEvent(Object source, List<Pwned> pwnedList, String userEmail) {
         super(source);
         this.pwnedList = pwnedList;
+        this.userEmail = userEmail;
     }
 
     public List<Pwned> getPwnedList() {
         return pwnedList;
     }
+
+    public String getUserEmail;
 }
