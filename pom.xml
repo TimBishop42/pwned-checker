@@ -14,7 +14,7 @@
     <name>pwned-checker</name>
     <description>Pwned account checker</description>
     <properties>
-        <java.version>11</java.version>
+        <java.version>8</java.version>
     </properties>
     <dependencies>
         <dependency>

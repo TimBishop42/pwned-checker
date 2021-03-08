@@ -8,3 +8,21 @@ spring:
   h2:
     console:
     enabled: true
+    mail:
+      host: smtp.gmail.com
+      port: 587
+      username: tim.bishop.testing@gmail.com
+      password:
+      properties:
+        mail:
+          smtp:
+            # Other properties
+            auth: true
+            connectiontimeout: 5000
+            timeout: 5000
+            writetimeout: 5000
+
+            # TLS , port 587
+            starttls.enable: true
+
+

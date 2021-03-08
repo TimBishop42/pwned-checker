@@ -14,11 +14,11 @@ public class ClientTask implements Runnable{
     @Override
     public void run() {
 
-        List<String> userEmails = pwnedUserService.fetchAllUsers();
+//        List<String> userEmails = pwnedUserService.fetchAllUsers();
+//
+//        List<Pwned> pwneByUserEmail = pwnedUserService.retrievePwnedListForUser("Test");
 
-        List<Pwned> pwneByUserEmail = pwnedUserService.retrievePwnedListForUser("Test");
-
-        System.out.println("Pwned!: "+ pwneByUserEmail.get(1));
+//        System.out.println("Pwned!: "+ pwneByUserEmail.get(1));
 
         //Do the DB check for users, query API
             //DB check needs to cache list of users to minimize DB calls

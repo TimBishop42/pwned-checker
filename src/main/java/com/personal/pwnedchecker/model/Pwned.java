@@ -7,7 +7,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Data
@@ -28,12 +27,12 @@ public class Pwned {
     private Date addedDate;
 
     private Date modifiedDate;
-    private List<String> DataClasses;
-    private boolean IsVerified;
-    private boolean IsFabricated;
-    private boolean IsSensitive;
-    private boolean IsRetired;
-    private boolean IsSpamList;
+    private String dataClasses;
+    private boolean isVerified;
+    private boolean isFabricated;
+    private boolean isSensitive;
+    private boolean isRetired;
+    private boolean isSpamList;
 
 
 

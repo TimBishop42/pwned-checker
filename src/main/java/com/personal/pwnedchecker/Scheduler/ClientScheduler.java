@@ -16,12 +16,7 @@ public class ClientScheduler {
 
     @Scheduled(fixedDelay = 10000)
     public void cheduledClientTask() {
-        List<String> userEmails = pwnedUserService.fetchAllUsers();
-
-        List<Pwned> pwneByUserEmail = pwnedUserService.retrievePwnedListForUser("Test");
-
-        System.out.println("Pwned!: "+ pwneByUserEmail.get(1));
-
+        pwnedUserService.checkIfAnyNewBreachesForAllUsers();
 
     }
 
