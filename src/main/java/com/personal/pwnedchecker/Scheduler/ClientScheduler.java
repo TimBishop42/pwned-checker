@@ -1,13 +1,12 @@
 package com.personal.pwnedchecker.Scheduler;
 
-import com.personal.pwnedchecker.model.Pwned;
 import com.personal.pwnedchecker.service.PwnedUserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
+@Slf4j
 @Component
 public class ClientScheduler {
 
@@ -16,6 +15,7 @@ public class ClientScheduler {
 
     @Scheduled(fixedDelay = 10000)
     public void cheduledClientTask() {
+        log.info("Checking to see if there are any new account breaches");
         pwnedUserService.checkIfAnyNewBreachesForAllUsers();
 
     }

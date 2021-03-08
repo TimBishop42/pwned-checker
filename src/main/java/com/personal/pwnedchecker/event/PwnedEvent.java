@@ -11,4 +11,8 @@ public class PwnedEvent extends ApplicationEvent {
         super(source);
         this.pwnedList = pwnedList;
     }
+
+    public List<Pwned> getPwnedList() {
+        return pwnedList;
+    }
 }

@@ -2,10 +2,7 @@ package com.personal.pwnedchecker.model;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
@@ -21,13 +18,14 @@ public class Pwned {
     private String name;
     private String title;
     private Date breachDate;
+    @Column(length = 1000)
     private String description;
     private Long pwnCount;
     private String domain;
     private Date addedDate;
 
     private Date modifiedDate;
-    private String dataClasses;
+//    private String dataClasses;
     private boolean isVerified;
     private boolean isFabricated;
     private boolean isSensitive;

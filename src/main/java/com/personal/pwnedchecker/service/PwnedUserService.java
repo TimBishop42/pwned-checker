@@ -13,7 +13,6 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,22 +46,32 @@ public class PwnedUserService {
     }
 
     private List<Pwned> checkIfNewPwning(List<Pwned> pwnList, List<Pwned> alreadyPwned) {
-        List<Pwned> newPwned = new ArrayList<>();
         return pwnList.stream()
-                .distinct()
-                .filter(alreadyPwned::contains)
+                .filter(pwned -> alreadyPwned.stream().map(Pwned::getPwnCount).noneMatch(pwnedCount -> pwnedCount.equals(pwned.getPwnCount())))
                 .collect(Collectors.toList());
     }
 
     public void checkIfAnyNewBreachesForAllUsers() {
         List<String> userEmails = fetchAllUsers();
         userEmails.stream().forEach(userEmail -> {
-            List<Pwned> newBreach = checkIfNewPwning(retrievePwnedListForUser(userEmail), pwnedRepository.findPwnedByUserEmail(userEmail));
+            List<Pwned> alreadyPwned = pwnedRepository.findPwnedByUserEmail(userEmail);
+            List<Pwned> newBreach = checkIfNewPwning(retrievePwnedListForUser(userEmail), alreadyPwned);
             if (newBreach != null && newBreach.size() > 0) {
                 log.info("New breach detected for user {}, number of breaches {}", userEmail, newBreach.size());
+                updateEmailAndSaveNewBreaches(newBreach, userEmail);
                 pwnedEventPublisher.publishPwnedEvent(newBreach);
             }
+            else {
+                log.info("No new account breaches found for user email: {}", userEmail);
+            }
         });
+
+    }
+
+    private void updateEmailAndSaveNewBreaches(List<Pwned> newBreach, String userEmail) {
+        newBreach.forEach(pwned -> pwned.setUserEmail(userEmail));
+        log.info("Saving new breaches");
+        pwnedRepository.saveAll(newBreach);
 
     }
 }

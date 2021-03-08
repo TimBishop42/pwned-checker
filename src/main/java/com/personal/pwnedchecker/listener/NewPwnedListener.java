@@ -15,6 +15,7 @@ public class NewPwnedListener implements ApplicationListener <PwnedEvent> {
 
     @Override
     public void onApplicationEvent(PwnedEvent applicationEvent) {
+        emailService.sendBreachNotification(applicationEvent);
         //Send a mail to the impacted user by calling emailService
         //To start, only send mails to my email
     }
