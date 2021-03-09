@@ -23,7 +23,7 @@ public class EmailService {
 
         msg.setSubject("New Account Breach Notification");
 
-        sb.append("Hi - the email account breach utility has detected a new breach against your email address, details below: \n");
+        sb.append("Hi \nthe email account breach utility has detected a new breach against your email address, I suggest you contact Tim and ask what to do: \n");
         pwnedEvent.getPwnedList().forEach(pwned -> {
             sb.append("\n\nCompany/Website: \n")
                     .append(pwned.getDomain())

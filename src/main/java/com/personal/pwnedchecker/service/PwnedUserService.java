@@ -58,14 +58,14 @@ public class PwnedUserService {
             List<Pwned> newBreach = checkIfNewPwning(retrievePwnedListForUser(userEmail), alreadyPwned);
             if (newBreach != null && newBreach.size() > 0) {
                 log.info("New breach detected for user {}, number of breaches {}", userEmail, newBreach.size());
-                updateEmailAndSaveNewBreaches(newBreach, userEmail);
                 pwnedEventPublisher.publishPwnedEvent(newBreach, userEmail);
+                updateEmailAndSaveNewBreaches(newBreach, userEmail);
             }
             else {
                 log.info("No new account breaches found for user email: {}", userEmail);
             }
             try {
-                Thread.sleep(1500);
+                Thread.sleep(2000);
             } catch (InterruptedException e) {
                 log.error("Unable to sleep execution thread - Pwned API will reject our next call. Error {}", e.toString());
                 e.printStackTrace();
