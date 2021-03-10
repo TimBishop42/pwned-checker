@@ -1,8 +1,11 @@
 package com.personal.pwnedchecker.client;
 
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.personal.pwnedchecker.model.Pwned;
+import com.personal.pwnedchecker.model.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -51,7 +54,19 @@ public class PwnedClient {
                 .uri(pwnedApiUrl + userEmail + "?truncateResponse=false")
                 .header("hibp-api-key", apiKey)
                 .retrieve()
-                .bodyToMono(Pwned[].class);
+                .bodyToMono(Pwned[].class)
+                .log();
+    }
+
+    public Mono<List<Response>> getPwnedResponseByUserEmail(String userEmail) {
+        return builder.build()
+                .get()
+                .uri(pwnedApiUrl + userEmail + "?truncateResponse=false")
+                .header("hibp-api-key", apiKey)
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<List<Response>>() {
+                })
+                .log();
     }
 
     public Flux<String> getPwnedStringByUserEmail(String userEmail) {

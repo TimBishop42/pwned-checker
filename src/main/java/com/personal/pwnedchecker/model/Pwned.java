@@ -1,5 +1,6 @@
 package com.personal.pwnedchecker.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -9,6 +10,7 @@ import java.util.List;
 
 @Entity
 @Data
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Pwned implements Serializable {
 
     @Id
@@ -29,11 +31,11 @@ public class Pwned implements Serializable {
     private Date modifiedDate;
     @Convert(converter =  StringListConverter.class)
     private List<String> dataClasses;
-    private boolean isVerified;
-    private boolean isFabricated;
-    private boolean isSensitive;
-    private boolean isRetired;
-    private boolean isSpamList;
+    private String isVerified;
+    private String isFabricated;
+    private String isSensitive;
+    private String isRetired;
+    private String isSpamList;
     private String logoPath;
 
 
