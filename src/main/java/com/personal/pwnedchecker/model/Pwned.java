@@ -3,11 +3,13 @@ package com.personal.pwnedchecker.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data
-public class Pwned {
+public class Pwned implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,12 +27,14 @@ public class Pwned {
     private Date addedDate;
 
     private Date modifiedDate;
-//    private String dataClasses;
+    @Convert(converter =  StringListConverter.class)
+    private List<String> dataClasses;
     private boolean isVerified;
     private boolean isFabricated;
     private boolean isSensitive;
     private boolean isRetired;
     private boolean isSpamList;
+    private String logoPath;
 
 
 

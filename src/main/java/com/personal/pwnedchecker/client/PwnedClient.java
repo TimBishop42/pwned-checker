@@ -2,28 +2,66 @@ package com.personal.pwnedchecker.client;
 
 
 import com.personal.pwnedchecker.model.Pwned;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 
 @Service
 public class PwnedClient {
 
-    private static final String pwnedHost = "https://haveibeenpwned.com/";
+    private static final String pwnedApiUrl = "https://haveibeenpwned.com/api/v3/breachedaccount/";
 
-    private WebClient client = WebClient.create(pwnedHost);
+//    private WebClient client = WebClient.create(pwnedHost);
 
-    private static final String pwnedApiUrl = "api/v3/breachedaccount/";
+//    private static final String pwnedApiUrl = "api/v3/breachedaccount/";
 
-    public Flux<Pwned> getPwnedByUserEmail(String userEmail) {
-        return client.get()
-                .uri(pwnedApiUrl+userEmail+"?truncateResponse=false")
-                .header("Add my API key here")
+    private static final String apiKey = "e8fc21303a024e309a68b3c1c59a7536";
+
+    @Autowired
+    private WebClient.Builder builder;
+
+//    public Flux<Pwned> getPwnedByUserEmail(String userEmail) {
+//        return builder.build()
+//                .get()
+//                .uri(pwnedApiUrl + userEmail + "?truncateResponse=false")
+//                .header("hibp-api-key", apiKey)
+//                .retrieve()
+//                .bodyToFlux(Pwned.class);
+//    }
+
+    public Mono<List<Pwned>> getPwnedByUserEmailMono(String userEmail) {
+        return builder.build()
+                .get()
+                .uri(pwnedApiUrl + userEmail + "?truncateResponse=false")
+                .header("hibp-api-key", apiKey)
+                .exchangeToFlux(clientResponse ->
+                        clientResponse.bodyToFlux(Pwned.class))
+                .collectList();
+    }
+
+    public Mono<Pwned[]> getPwnedListByUserEmail(String userEmail) {
+        return builder.build()
+                .get()
+                .uri(pwnedApiUrl + userEmail + "?truncateResponse=false")
+                .header("hibp-api-key", apiKey)
+                .retrieve()
+                .bodyToMono(Pwned[].class);
+    }
+
+    public Flux<String> getPwnedStringByUserEmail(String userEmail) {
+        return builder.build()
+                .get()
+                .uri(pwnedApiUrl + userEmail + "?truncateResponse=false")
+                .header("hibp-api-key", apiKey)
                 .exchangeToFlux(clientResponse -> {
                     if (clientResponse.statusCode().is2xxSuccessful()) {
-                        return clientResponse.bodyToFlux(Pwned.class);
+                        return clientResponse.bodyToFlux(String.class);
                     } else {
                         throw new HttpClientErrorException(clientResponse.statusCode());
                     }
