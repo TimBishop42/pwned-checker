@@ -1,6 +1,7 @@
 package com.personal.pwnedchecker.service;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
@@ -8,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.personal.pwnedchecker.client.PwnedClient;
 import com.personal.pwnedchecker.event.PwnedEventPublisher;
 import com.personal.pwnedchecker.model.Pwned;
+import com.personal.pwnedchecker.model.PwnedGenerated;
 import com.personal.pwnedchecker.model.PwnedUser;
 import com.personal.pwnedchecker.model.Response;
 import com.personal.pwnedchecker.repository.PwnedRepository;
@@ -84,10 +86,12 @@ public class PwnedUserService {
             List<Pwned> alreadyPwned = pwnedRepository.findPwnedByUserEmail(userEmail);
 //            List<Pwned> pwnedList = retrievePwnedListForUser(userEmail);
 //            Flux<Pwned> otherPwned = pwnedClient.getPwnedByUserEmail(userEmail);
-            List<String> pwnedListString = retrievePwnedStringListForUser(userEmail);
-            List<Pwned> pwnedList = Arrays.asList(unmarshallClientResponse(pwnedListString.get(0)));
-//            List<Response> responses = pwnedClient.getPwnedResponseByUserEmail(userEmail).block();
-//            List<Pwned> pwnedList = Arrays.asList(pwnedClient.getPwnedListByUserEmail(userEmail).block());
+//            List<String> pwnedListString = retrievePwnedStringListForUser(userEmail);
+//            List<Pwned> pwnedList = Arrays.asList(unmarshallClientResponse(pwnedListString.get(0)));
+            Object[] responses = pwnedClient.getPwnedResponseByUserEmail(userEmail).block();
+
+//            List<PwnedGenerated> pwnedListDirectUnmarshal = Arrays.asList(pwnedClient.getPwnedListByUserEmail(userEmail).block());
+            List<Pwned> pwnedList = transformObjectArrayToPwnedList(responses);
             List<Pwned> newBreach = checkIfNewPwning(pwnedList, alreadyPwned);
             if (newBreach != null && newBreach.size() > 0) {
                 log.info("New breach detected for user {}, number of breaches {}", userEmail, newBreach.size());
@@ -104,6 +108,13 @@ public class PwnedUserService {
             }
         });
 
+    }
+
+    private List<Pwned> transformObjectArrayToPwnedList(Object[] responses) {
+        ObjectMapper mapper = new ObjectMapper();
+//        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        mapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true);
+        return Arrays.stream(responses).map(response -> mapper.convertValue(response, Pwned.class)).collect(Collectors.toList());
     }
 
     private void updateEmailAndSaveNewBreaches(List<Pwned> newBreach, String userEmail) {

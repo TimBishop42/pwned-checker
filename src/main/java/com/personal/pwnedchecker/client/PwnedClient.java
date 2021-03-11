@@ -3,6 +3,7 @@ package com.personal.pwnedchecker.client;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.personal.pwnedchecker.model.Pwned;
+import com.personal.pwnedchecker.model.PwnedGenerated;
 import com.personal.pwnedchecker.model.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
@@ -24,7 +25,7 @@ public class PwnedClient {
 
 //    private static final String pwnedApiUrl = "api/v3/breachedaccount/";
 
-    private static final String apiKey = "e8fc21303a024e309a68b3c1c59a7536";
+    private static final String apiKey = "";
 
     @Autowired
     private WebClient.Builder builder;
@@ -48,24 +49,23 @@ public class PwnedClient {
                 .collectList();
     }
 
-    public Mono<Pwned[]> getPwnedListByUserEmail(String userEmail) {
-        return builder.build()
-                .get()
-                .uri(pwnedApiUrl + userEmail + "?truncateResponse=false")
-                .header("hibp-api-key", apiKey)
-                .retrieve()
-                .bodyToMono(Pwned[].class)
-                .log();
-    }
+//    public Mono<PwnedGenerated[]> getPwnedListByUserEmail(String userEmail) {
+//        return builder.build()
+//                .get()
+//                .uri(pwnedApiUrl + userEmail + "?truncateResponse=false")
+//                .header("hibp-api-key", apiKey)
+//                .retrieve()
+//                .bodyToMono(PwnedGenerated[].class)
+//                .log();
+//    }
 
-    public Mono<List<Response>> getPwnedResponseByUserEmail(String userEmail) {
+    public Mono<Object[]> getPwnedResponseByUserEmail(String userEmail) {
         return builder.build()
                 .get()
                 .uri(pwnedApiUrl + userEmail + "?truncateResponse=false")
                 .header("hibp-api-key", apiKey)
                 .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<List<Response>>() {
-                })
+                .bodyToMono(Object[].class)
                 .log();
     }
 

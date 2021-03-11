@@ -18,5 +18,7 @@ public class PwnedEvent extends ApplicationEvent {
         return pwnedList;
     }
 
-    public String getUserEmail;
+    public String getUserEmail() {
+        return this.userEmail;
+    };
 }

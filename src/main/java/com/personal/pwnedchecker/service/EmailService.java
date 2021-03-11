@@ -19,7 +19,7 @@ public class EmailService {
 
         StringBuilder sb = new StringBuilder();
         SimpleMailMessage msg = new SimpleMailMessage();
-        msg.setTo(pwnedEvent.getUserEmail);
+        msg.setTo(pwnedEvent.getUserEmail());
 
         msg.setSubject("New Account Breach Notification");
 
@@ -29,6 +29,8 @@ public class EmailService {
                     .append(pwned.getDomain())
                     .append("\n\nBreach Date: \n")
                     .append(pwned.getBreachDate())
+                    .append("\n\nCompromised Data: \n")
+                    .append(pwned.getDataClasses())
                     .append("\n\nDescription: \n")
                     .append(pwned.getDescription());
         });

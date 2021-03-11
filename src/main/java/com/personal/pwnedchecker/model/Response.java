@@ -8,26 +8,10 @@ import lombok.Data;
 import java.util.Date;
 import java.util.List;
 
-
-//Todo: not needed
-@JsonIgnoreProperties(ignoreUnknown = true)
 @Data
+@JsonIgnoreProperties(ignoreUnknown = true)
 @JsonFormat(with = JsonFormat.Feature.ACCEPT_CASE_INSENSITIVE_PROPERTIES)
 public class Response {
 
-    String name;
-    String title;
-    String domain;
-    Date breachDate;
-    Date addedDate;
-    Date modifiedDate;
-    Long pwnCount;
-    String description;
-    String logoPath;
-    List<String> dataClasses;
-    Boolean isVerified;
-    Boolean isFabricate;
-    Boolean isSensitive;
-    Boolean isRetired;
-    Boolean isSpamList;
+    private Pwned[] pwnedList;
 }
