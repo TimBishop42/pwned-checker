@@ -31,13 +31,17 @@ public class Pwned implements Serializable {
     @JsonProperty("Domain")
     private String domain;
     @JsonProperty("BreachDate")
+    @Convert(converter = DateConverter.class)
     private String breachDate;
     @JsonProperty("AddedDate")
+    @Convert(converter = DateTimeConverter.class)
     private String addedDate;
     @JsonProperty("ModifiedDate")
+    @Convert(converter = DateTimeConverter.class)
     private String modifiedDate;
     @JsonProperty("PwnCount")
     private Integer pwnCount;
+    @Column(length = 1000)
     @JsonProperty("Description")
     private String description;
     @JsonProperty("LogoPath")

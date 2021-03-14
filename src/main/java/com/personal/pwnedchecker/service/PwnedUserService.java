@@ -1,17 +1,13 @@
 package com.personal.pwnedchecker.service;
 
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.personal.pwnedchecker.client.PwnedClient;
 import com.personal.pwnedchecker.event.PwnedEventPublisher;
 import com.personal.pwnedchecker.model.Pwned;
-import com.personal.pwnedchecker.model.PwnedGenerated;
 import com.personal.pwnedchecker.model.PwnedUser;
-import com.personal.pwnedchecker.model.Response;
 import com.personal.pwnedchecker.repository.PwnedRepository;
 import com.personal.pwnedchecker.repository.PwnedUserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +16,6 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -84,15 +79,8 @@ public class PwnedUserService {
         List<String> userEmails = fetchAllUsers();
         userEmails.stream().forEach(userEmail -> {
             List<Pwned> alreadyPwned = pwnedRepository.findPwnedByUserEmail(userEmail);
-//            List<Pwned> pwnedList = retrievePwnedListForUser(userEmail);
-//            Flux<Pwned> otherPwned = pwnedClient.getPwnedByUserEmail(userEmail);
-//            List<String> pwnedListString = retrievePwnedStringListForUser(userEmail);
-//            List<Pwned> pwnedList = Arrays.asList(unmarshallClientResponse(pwnedListString.get(0)));
-            Object[] responses = pwnedClient.getPwnedResponseByUserEmail(userEmail).block();
-
-//            List<PwnedGenerated> pwnedListDirectUnmarshal = Arrays.asList(pwnedClient.getPwnedListByUserEmail(userEmail).block());
-            List<Pwned> pwnedList = transformObjectArrayToPwnedList(responses);
-            List<Pwned> newBreach = checkIfNewPwning(pwnedList, alreadyPwned);
+            List<Pwned> responseList = Arrays.asList(pwnedClient.getPwnedListByUserEmail(userEmail).block());
+            List<Pwned> newBreach = checkIfNewPwning(responseList, alreadyPwned);
             if (newBreach != null && newBreach.size() > 0) {
                 log.info("New breach detected for user {}, number of breaches {}", userEmail, newBreach.size());
                 pwnedEventPublisher.publishPwnedEvent(newBreach, userEmail);
