@@ -38,8 +38,7 @@ public class PwnedClient {
                 .uri(pwnedApiUrl + userEmail + "?truncateResponse=false")
                 .header("hibp-api-key", apiKey)
                 .retrieve()
-                .bodyToMono(Pwned[].class)
-                .log();
+                .bodyToMono(Pwned[].class);
     }
 
     public Mono<Object[]> getPwnedResponseByUserEmail(String userEmail) {

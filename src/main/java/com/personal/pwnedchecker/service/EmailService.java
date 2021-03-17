@@ -3,6 +3,7 @@ package com.personal.pwnedchecker.service;
 
 import com.personal.pwnedchecker.event.PwnedEvent;
 import lombok.extern.slf4j.Slf4j;
+import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -23,7 +24,7 @@ public class EmailService {
 
         msg.setSubject("New Account Breach Notification");
 
-        sb.append("Hi \nthe email account breach utility has detected a new breach against your email address, I suggest you contact Tim and ask what to do: \n");
+        sb.append("Hi \nthe email account breach utility has detected a new breach against your email address, ask Tim if you're not sure what to do about this: \n");
         pwnedEvent.getPwnedList().forEach(pwned -> {
             sb.append("\n\nCompany/Website: \n")
                     .append(pwned.getDomain())
@@ -32,7 +33,7 @@ public class EmailService {
                     .append("\n\nCompromised Data: \n")
                     .append(pwned.getDataClasses())
                     .append("\n\nDescription: \n")
-                    .append(pwned.getDescription());
+                    .append(Jsoup.parse(pwned.getDescription()).text());
         });
 
         msg.setText(sb.toString());
