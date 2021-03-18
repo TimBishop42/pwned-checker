@@ -17,6 +17,7 @@ public class PwnedClient {
 
     private static final String pwnedApiUrl = "https://haveibeenpwned.com/api/v3/breachedaccount/";
 
+    //Get an API key from https://haveibeenpwned.com/
     private static final String apiKey = "";
 
     @Autowired
