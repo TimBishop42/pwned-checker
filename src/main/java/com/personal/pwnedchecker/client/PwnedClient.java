@@ -3,6 +3,7 @@ package com.personal.pwnedchecker.client;
 
 import com.personal.pwnedchecker.model.Pwned;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -18,7 +19,8 @@ public class PwnedClient {
     private static final String pwnedApiUrl = "https://haveibeenpwned.com/api/v3/breachedaccount/";
 
     //Get an API key from https://haveibeenpwned.com/
-    private static final String apiKey = "";
+    @Value("${pwned.api.key}")
+    private String apiKey;
 
     @Autowired
     private WebClient.Builder builder;
