@@ -60,6 +60,16 @@ public class Pwned implements Serializable {
     @JsonProperty("IsSpamList")
     private Boolean isSpamList;
 
+    @Transient
+    private String rawDescription;
+
+    public void truncDescription() {
+        rawDescription = description;
+        if(description.length() > 1000) { //max DB field length
+            this.description = description.substring(0, 999);
+        }
+    }
+
 
 
 

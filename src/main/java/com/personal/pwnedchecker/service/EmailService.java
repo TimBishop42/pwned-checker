@@ -33,7 +33,7 @@ public class EmailService {
                     .append("\n\nCompromised Data: \n")
                     .append(pwned.getDataClasses())
                     .append("\n\nDescription: \n")
-                    .append(Jsoup.parse(pwned.getDescription()).text());
+                    .append(Jsoup.parse(pwned.getRawDescription()).text());
         });
 
         msg.setText(sb.toString());

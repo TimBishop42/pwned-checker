@@ -11,6 +11,7 @@ import com.personal.pwnedchecker.model.PwnedUser;
 import com.personal.pwnedchecker.repository.PwnedRepository;
 import com.personal.pwnedchecker.repository.PwnedUserRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.exception.DataException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -81,12 +82,17 @@ public class PwnedUserService {
             List<Pwned> alreadyPwned = pwnedRepository.findPwnedByUserEmail(userEmail);
             List<Pwned> responseList = Arrays.asList(pwnedClient.getPwnedListByUserEmail(userEmail).block());
             List<Pwned> newBreach = checkIfNewPwning(responseList, alreadyPwned);
-            if (newBreach != null && newBreach.size() > 0) {
-                log.info("New breach detected for user {}, number of breaches {}", userEmail, newBreach.size());
-                pwnedEventPublisher.publishPwnedEvent(newBreach, userEmail);
-                updateEmailAndSaveNewBreaches(newBreach, userEmail);
-            } else {
-                log.info("No new account breaches found for user email: {}", userEmail);
+            try {
+                if (newBreach != null && newBreach.size() > 0) {
+                    log.info("New breach detected for user {}, number of breaches {}", userEmail, newBreach.size());
+                    updateEmailAndSaveNewBreaches(newBreach, userEmail);
+                    pwnedEventPublisher.publishPwnedEvent(newBreach, userEmail);
+                } else {
+                    log.info("No new account breaches found for user email: {}", userEmail);
+                }
+            }
+            catch (DataException e) {
+                log.info("Problem saving new breach - user email not generated. Error:",e.getMessage() );
             }
             try {
                 Thread.sleep(2000);
@@ -105,10 +111,12 @@ public class PwnedUserService {
         return Arrays.stream(responses).map(response -> mapper.convertValue(response, Pwned.class)).collect(Collectors.toList());
     }
 
-    private void updateEmailAndSaveNewBreaches(List<Pwned> newBreach, String userEmail) {
-        newBreach.forEach(pwned -> pwned.setUserEmail(userEmail));
+    private void updateEmailAndSaveNewBreaches(List<Pwned> newBreach, String userEmail){
+        newBreach.forEach(pwned -> {
+            pwned.setUserEmail(userEmail);
+            pwned.truncDescription();
+        });
         log.info("Saving new breaches");
         pwnedRepository.saveAll(newBreach);
-
     }
 }
