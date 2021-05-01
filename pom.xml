@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.personal</groupId>
     <artifactId>pwned-checker</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <name>pwned-checker</name>
     <description>Pwned account checker</description>
     <properties>
@@ -106,6 +106,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
+                    <executable>true</executable>
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>
