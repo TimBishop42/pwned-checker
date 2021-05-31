@@ -39,6 +39,6 @@ public class EmailService {
 
         msg.setText(sb.toString());
         javaMailSender.send(msg);
-        log.info("Breach notification mail sent to user");
+        log.info("Breach notification mail sent to user {}", pwnedEvent.getUserEmail());
     }
 }
